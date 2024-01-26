@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16.1
+    container_name: postgres-product
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: product
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - postgres-product-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-product
+    environment:
+      PGADMIN_DEFAULT_EMAIL: email@email.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "2345:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-product-network
+
+networks:
+  postgres-product-network:
+    driver: bridge
